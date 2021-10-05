@@ -54,6 +54,10 @@ router.beforeEach((to, from, next) => {
           next()
           return
         }
+        if (from.path == '/' && to.path == '/fundsplan/recommend') {
+          next({ path: '/fundsplan/index' })
+          return
+        }
         store.dispatch('GetUserInfo');
         store.dispatch('GetInfo').then(() => { // 拉取用户信息
           store.dispatch('GetModulesTree').then(modules => { // 获取用户可访问的模块

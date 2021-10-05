@@ -4,76 +4,206 @@
     <strong class="pageFundsplan__subTitle">資金方案百百種，政府補助、銀行融資、天使投資...等，透過簡單的問題幫你找到適合的投資方案！</strong>
 
     <div class="pageFundsplan__form">
-      <el-form :label-position="'top'" label-width="120px" :model="temp">
-        <el-form-item label="Q1.希望的資金來源(多選)">
-          <el-checkbox-group size="small" v-model="temp.checkList">
-            <el-checkbox label="補助"></el-checkbox>
-            <el-checkbox label="融資"></el-checkbox>
-            <el-checkbox label="投資"></el-checkbox>
-            <el-checkbox label="競賽"></el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-
-        <el-form-item label="Q2.是否已成立公司行號(單選)">
-          <el-input size="small"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Q3.主要產品服務">
-          <el-select size="small" class="w-full" v-model="temp.mainProduct">
-            <el-option label="123" value="123"></el-option>
+      <el-form :label-position="'top'" label-width="120px" ref="ruleForm" :model="temp" :rules="rules">
+        <el-form-item label="Q1 希望資金來源(多選)" prop="Q1">
+          <el-select class="w-full" v-model="temp.Q1" size="small" multiple>
+            <el-option label="融資貸款" value="融資貸款"></el-option>
+            <el-option label="政府補助" value="政府補助"></el-option>
+            <el-option label="創投資金" value="創投資金"></el-option>
+            <el-option label="競賽獎金" value="競賽獎金"></el-option>
+            <el-option label="其他" value="其他"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="Q4.公司發展階段(多選)">
-          <el-checkbox-group size="small" v-model="temp.checkList">
-            <el-checkbox label="已有營運計畫書"></el-checkbox>
-            <el-checkbox label="選項目明文字"></el-checkbox>
-            <el-checkbox label="選項目明文字"></el-checkbox>
-          </el-checkbox-group>
+        <el-form-item label="Q2.1 是否已成立公司行號" prop="Q2">
+          <el-select class="w-full" v-model="temp.Q2" size="small" @change="getQ2">
+            <el-option label="是" value="是"></el-option>
+            <el-option label="否" value="否"></el-option>
+          </el-select>
         </el-form-item>
 
-        <el-form-item label="Q5.此次資金需求範圍(單選)">
-          <el-input size="small"></el-input>
+        <el-form-item label="Q2.2 公司登記日期" prop="Q3">
+          <el-date-picker class="w-full" v-model="temp.Q3" type="date" placeholder="請選擇日期" value-format="yyyy-MM-dd" :picker-options="disAfterDate" size="small">
+          </el-date-picker>
         </el-form-item>
 
-        <el-form-item label="Q6.此次資金用途(多選)">
-          <el-checkbox-group size="small" v-model="temp.checkList">
-            <el-checkbox label="研發費用、資產購置、周轉止"></el-checkbox>
-          </el-checkbox-group>
+        <el-form-item label="Q2.3 公司登記地" prop="county">
+          <el-select class="w-full" v-model="temp.county" placeholder="請選擇縣市" size="small">
+            <el-option v-for="(item, idx) in countyData" :key="idx" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+          <el-select class="w-full" v-model="temp.district" placeholder="請選擇區域" no-data-text="請先選擇縣市" size="small">
+            <el-option v-for="(items, $idx) in ChooseCounty(districtData)" :key="$idx" :label="items.label" :value="items.value">
+            </el-option>
+          </el-select>
         </el-form-item>
 
-        <el-form-item label="Q7.公司產業類別(多選)">
-          <el-checkbox-group size="small" v-model="temp.checkList">
-            <el-checkbox label="研發費用、資產購置、周轉止"></el-checkbox>
-          </el-checkbox-group>
+        <el-form-item label="Q3. 主要產品/服務" v-if="temp.Q2 == '是'" prop="Q5" :rules="temp.Q2 == '是' ? rules.Q5 : [{ required: false }]">
+          <el-input size="small" class="w-full" v-model="temp.Q5"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Q4. 發展階段(多選)" v-if="temp.Q2 == '是'" prop="Q6" :rules="temp.Q2 == '是' ? rules.Q6 : [{ required: false }]">
+          <el-select class="w-full" v-model="temp.Q6" size="small" multiple>
+            <el-option label="尚無具體想法" value="尚無具體想法"></el-option>
+            <el-option label="已有創業點子" value="已有創業點子"></el-option>
+            <el-option label="產品開發中" value="產品開發中"></el-option>
+            <el-option label="完成最小可行性產品並測試市場" value="完成最小可行性產品並測試市場"></el-option>
+            <el-option label="已組成經營團隊" value="已組成經營團隊"></el-option>
+            <el-option label="已籌促到營運資金" value="已籌促到營運資金"></el-option>
+            <el-option label="已有營運計劃書" value="已有營運計劃書"></el-option>
+            <el-option label="已經登記設立公司/行號" value="已經登記設立公司/行號"></el-option>
+            <el-option label="已經進入成長期" value="已經進入成長期"></el-option>
+            <el-option label="已經進入成熟期" value="已經進入成熟期"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="Q5. 資金需求範圍" v-if="temp.Q2 == '是'" prop="Q7" :rules="temp.Q2 == '是' ? rules.Q7 : [{ required: false }]">
+          <el-select class="w-full" v-model="temp.Q7" size="small">
+            <el-option label="50萬以下" value="50萬以下"></el-option>
+            <el-option label="50-100萬" value="50-100萬"></el-option>
+            <el-option label="100-300萬" value="100-300萬"></el-option>
+            <el-option label="300-500萬" value="300-500萬"></el-option>
+            <el-option label="500-1000萬" value="500-1000萬"></el-option>
+            <el-option label="1000萬以上" value="1000萬以上"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="Q6. 資金用途(多選)" prop="Q8">
+          <el-select class="w-full" v-model="temp.Q8" size="small" multiple>
+            <el-option label="創業啟動金" value="創業啟動金"></el-option>
+            <el-option label="營運資金" value="營運資金"></el-option>
+            <el-option label="研發費用" value="研發費用"></el-option>
+            <el-option label="資產購置" value="資產購置"></el-option>
+            <el-option label="週轉金" value="週轉金"></el-option>
+            <el-option label="公司擴編" value="公司擴編"></el-option>
+            <el-option label="行銷推廣" value="行銷推廣"></el-option>
+            <el-option label="其他" value="其他"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="Q7. 產業類別(多選)" prop="Q9">
+          <el-select class="w-full" v-model="temp.Q9" size="small" multiple>
+            <el-option label="綠能環保" value="綠能環保"></el-option>
+            <el-option label="生技產業" value="生技產業"></el-option>
+            <el-option label="智慧雲端" value="智慧雲端"></el-option>
+            <el-option label="智慧製造" value="智慧製造"></el-option>
+            <el-option label="循環經濟" value="循環經濟"></el-option>
+            <el-option label="新農業" value="新農業"></el-option>
+            <el-option label="數位媒體" value="數位媒體"></el-option>
+            <el-option label="社會創新" value="社會創新"></el-option>
+            <el-option label="文創產業" value="文創產業"></el-option>
+            <el-option label="電子商務" value="電子商務"></el-option>
+            <el-option label="金融科技" value="金融科技"></el-option>
+            <el-option label="區塊鏈" value="區塊鏈"></el-option>
+            <el-option label="資訊科技" value="資訊科技"></el-option>
+            <el-option label="其他" value="其他"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
     </div>
 
     <div class="pageFundsplan__btn">
-      <button @click="$router.push({name: 'fundsplanRecommend'})">開始找方案</button>
+      <button @click="startFind()">開始找方案</button>
     </div>
   </div>
 </template>
 
 <script>
-import Layout from "@/views/layout/Layout";
+import { cityAndCountiesLite, Counties } from "@/assets/taiwan";
 
+import Layout from "@/views/layout/Layout";
 import Title from "@/components/Title";
+
+import * as planss from "@/api/planss";
 
 export default {
   components: { Title },
   data() {
     return {
+      countyData: Counties,
+      districtData: cityAndCountiesLite,
+
       temp: {
-        checkList: [],
-        mainProduct: "",
+        county: "",
+        district: "",
+
+        Q1: "",
+        Q2: "",
+        Q3: "2001-01-01",
+        Q4: "",
+        Q5: "",
+        Q6: "",
+        Q7: "",
+        Q8: "",
+        Q9: "",
       },
-      //   rules: {},
+      rules: {
+        Q1: [{ required: true, message: "必填欄位", trigger: "change" }],
+        Q2: [{ required: true, message: "必填欄位", trigger: "change" }],
+        Q3: [{ required: true, message: "必填欄位", trigger: "change" }],
+        county: [{ required: true, message: "必填欄位", trigger: "change" }],
+        Q5: [{ required: true, message: "必填欄位", trigger: "blur" }],
+        Q6: [{ required: true, message: "必填欄位", trigger: "change" }],
+        Q7: [{ required: true, message: "必填欄位", trigger: "change" }],
+        Q8: [{ required: true, message: "必填欄位", trigger: "change" }],
+        Q9: [{ required: true, message: "必填欄位", trigger: "change" }],
+      },
+      disAfterDate: {
+        disableDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;
+        },
+      },
     };
   },
-  methods: {},
-  mounted() {},
+  computed: {
+    ChooseCounty() {
+      return (data) => {
+        return data[this.temp.county];
+      };
+    },
+  },
+  methods: {
+    getQ2(val) {
+      if (val == "否") {
+        this.temp.Q5 = "";
+        this.temp.Q6 = "";
+        this.temp.Q7 = "";
+      }
+    },
+    startFind() {
+      this.$refs["ruleForm"].validate((valid) => {
+        if (valid) {
+          this.temp.Q1 =
+            this.temp.Q1.length > 0 ? this.temp.Q1.join(",") : "無";
+          this.temp.Q4 = `${this.temp.county}${this.temp.district}`;
+          this.temp.Q5 = this.temp.Q5 !== "" ? this.temp.Q5 : "無";
+          this.temp.Q6 =
+            this.temp.Q6.length > 0 ? this.temp.Q6.join(",") : "無";
+          this.temp.Q7 = this.temp.Q7 !== "" ? this.temp.Q7 : "無";
+          this.temp.Q8 =
+            this.temp.Q8.length > 0 ? this.temp.Q8.join(",") : "無";
+          this.temp.Q9 =
+            this.temp.Q9.length > 0 ? this.temp.Q9.join(",") : "無";
+
+          planss.userLoadView(this.temp).then((res) => {
+            this.$store.dispatch("setPlanssList", res.data);
+            this.$router.push({ name: "fundsplanRecommend" });
+          });
+        } else {
+          this.$nextTick(() => {
+            let isError = document.getElementsByClassName("is-error");
+            isError[0].scrollIntoView({
+              block: "center",
+              behavior: "smooth",
+            });
+          });
+        }
+      });
+    },
+  },
+  mounted() {
+    this.$refs["ruleForm"].resetFields();
+  },
   created() {
     const addRouter = [
       {
@@ -83,7 +213,6 @@ export default {
         name: "fundsplan",
         meta: {
           title: "資金方案推薦",
-          //   icon: "eye",
         },
         children: [
           {
@@ -94,7 +223,6 @@ export default {
               notauth: true,
               title: "資金方案推薦-媒合",
               noCache: true,
-              //   icon: "star",
             },
           },
         ],

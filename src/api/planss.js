@@ -31,3 +31,11 @@ export function del(data) {
         data
     })
 }
+
+export function userLoadView(params) {
+    return request({
+        url: '/Planss/UserLoadView',
+        method: 'get',
+        params
+    })
+}

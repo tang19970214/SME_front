@@ -3,32 +3,39 @@
     <Title title="資金方案推薦" />
     <strong class="pageRecommend__subTitle">依據你此次的需求，推薦以下幾個方案：</strong>
 
-    <div class="pageRecommend__card" v-for="item in 3" :key="item">
+    <div class="pageRecommend__card" v-for="item in planssList" :key="item">
+      <!-- 計畫種類 -->
       <div class="pageRecommend__card--header">
-        <strong>融資貸款</strong>
+        <strong>{{item.planType}}</strong>
       </div>
       <div class="pageRecommend__card--body">
         <div class="company">
           <div class="w-full">
-            <strong>臺灣中小企業銀行</strong>
+            <!-- 公司名 -->
+            <strong>{{item.planObject}}</strong>
           </div>
-          <div class="w-full company__btns">
-            <button class="company__btns--mainColor">即將受理</button>
-            <button class="company__btns--subColor">顯示地區名</button>
-            <button class="company__btns--subColor">顯示對象名</button>
+          <div class="w-full company__tags">
+            <!-- 即將受理 -->
+            <span class="company__tags--mainColor" v-if="!!item.planState">{{item.planState}}</span>
+            <!-- 顯示地區名 -->
+            <span class="company__tags--subColor" v-if="!!item.planArea">{{item.planArea}}</span>
+            <!-- 顯示對象名 -->
+            <span class="company__tags--subColor" v-if="!!item.planObject">{{item.planObject}}</span>
           </div>
         </div>
 
+        <!-- 計劃名 -->
         <div class="title">
-          <strong>經濟部小型企業創新研發計畫(SBIR)</strong>
+          <strong>{{item.planName}}</strong>
         </div>
 
+        <!-- 摘要 -->
         <div class="introduce">
-          <p>顯示計畫摘要文字</p>
+          <p>{{item.planSummary}}</p>
         </div>
 
-        <div class="viewMore">
-          <a href="#">＋了解更多</a>
+        <div class="viewMore" v-if="!!item.url">
+          <a :href="item.url">＋了解更多</a>
         </div>
       </div>
     </div>
@@ -43,7 +50,15 @@
 import Title from "@/components/Title";
 
 export default {
+  data() {
+    return {
+      planssList: [],
+    };
+  },
   components: { Title },
+  mounted() {
+    this.planssList = this.$store.state.plans?.planssList || [];
+  },
 };
 </script>
 
@@ -92,22 +107,17 @@ export default {
         justify-content: space-between;
         color: #0092c3;
 
-        &__btns {
+        &__tags {
           display: flex;
           align-items: center;
           justify-content: flex-end;
 
-          button {
+          span {
             margin-right: 8px;
             color: white;
             border: none;
             padding: 6px 16px;
             border-radius: 8px;
-            cursor: pointer;
-
-            &:hover {
-              opacity: 0.8;
-            }
           }
 
           &--mainColor {
