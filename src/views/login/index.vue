@@ -24,21 +24,25 @@
         <div class="loginCard loginCard__signIn">
           <div class="loginCard__signIn--title">Sign In 登入</div>
 
-          <div class="loginCard__form">
-            <el-input size="small" placeholder="請輸入電子郵件" v-model="loginInfo.username">
-              <template slot="prepend">
-                <i class="el-icon-arrow-right"></i>
-                <strong>電子郵件</strong>
-              </template>
-            </el-input>
+          <el-form :model="loginInfo" class="loginCard__form">
+            <el-form-item prop="email">
+              <el-input size="small" placeholder="請輸入電子郵件" v-model="loginInfo.username">
+                <template slot="prepend">
+                  <i class="el-icon-arrow-right"></i>
+                  <strong>電子郵件</strong>
+                </template>
+              </el-input>
+            </el-form-item>
 
-            <el-input size="small" placeholder="請輸入密碼" v-model="loginInfo.password" show-password @keyup.enter="handleLogin()">
-              <template slot="prepend">
-                <i class="el-icon-arrow-right"></i>
-                <strong>輸入密碼</strong>
-              </template>
-            </el-input>
-          </div>
+            <el-form-item prop="password">
+              <el-input size="small" placeholder="請輸入密碼" v-model="loginInfo.password" show-password @keyup.enter="handleLogin()">
+                <template slot="prepend">
+                  <i class="el-icon-arrow-right"></i>
+                  <strong>輸入密碼</strong>
+                </template>
+              </el-input>
+            </el-form-item>
+          </el-form>
 
           <div class="loginCard__btn loginCard__signIn--btn">
             <button @click="handleLogin()">登入</button>
@@ -55,21 +59,25 @@
         <div class="loginCard loginCard__newMember">
           <div class="loginCard__newMember--title">New Member <span>註冊</span></div>
 
-          <div class="loginCard__form">
-            <el-input size="small" placeholder="請輸入電子郵件" v-model="registerInfo.email">
-              <template slot="prepend">
-                <i class="el-icon-arrow-right"></i>
-                <strong>電子郵件</strong>
-              </template>
-            </el-input>
+          <el-form :model="registerInfo" ref="ruleForm" :rules="rules" class="loginCard__form">
+            <el-form-item prop="email">
+              <el-input size="small" type="email" placeholder="請輸入電子郵件" v-model="registerInfo.email">
+                <template slot="prepend">
+                  <i class="el-icon-arrow-right"></i>
+                  <strong>電子郵件</strong>
+                </template>
+              </el-input>
+            </el-form-item>
 
-            <el-input size="small" placeholder="請輸入建立密碼" v-model="registerInfo.password" show-password>
-              <template slot="prepend">
-                <i class="el-icon-arrow-right"></i>
-                <strong>建立密碼</strong>
-              </template>
-            </el-input>
-          </div>
+            <el-form-item prop="password">
+              <el-input size="small" placeholder="請輸入建立密碼" v-model="registerInfo.password" show-password>
+                <template slot="prepend">
+                  <i class="el-icon-arrow-right"></i>
+                  <strong>建立密碼</strong>
+                </template>
+              </el-input>
+            </el-form-item>
+          </el-form>
 
           <div class="loginCard__operate loginCard__operate--black">
             <el-checkbox v-model="agreeTerms">註冊即同意<b>資金通會員服務條款</b></el-checkbox>
@@ -85,10 +93,23 @@
 </template>
 
 <script>
-// import * as users from "@/api/users";
+import * as users from "@/api/users";
 
 export default {
   data() {
+    let checkEmail = (rule, value, callback) => {
+      const mail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      if (!value) {
+        return callback(new Error("請填寫註冊線上課程之電子信箱"));
+      }
+      setTimeout(() => {
+        if (mail.test(value)) {
+          callback();
+        } else {
+          callback(new Error("請輸入正確的信箱格式"));
+        }
+      }, 100);
+    };
     return {
       loginInfo: {
         username: "",
@@ -99,7 +120,11 @@ export default {
       registerInfo: {
         email: "",
         password: "",
-        code: "",
+        code: "string",
+      },
+      rules: {
+        email: [{ required: true, validator: checkEmail, trigger: "blur" }],
+        password: [{ required: true, message: "必填欄位", trigger: "blur" }],
       },
       agreeTerms: false,
 
@@ -154,19 +179,32 @@ export default {
       }
     },
     register() {
-      console.log(this.registerInfo);
-      if (this.registerInfo.email !== "" || this.registerInfo.password !== "") {
-        // users.ExportUserByAdmin(this.registerInfo).then((res) => {
-        //   console.log(res);
-        // });
-      } else {
-        this.$notify({
-          title: "錯誤",
-          message: "請確實輸入電子郵件或密碼",
-          type: "error",
-          duration: 2000,
-        });
-      }
+      this.$refs["ruleForm"].validate((valid) => {
+        if (valid) {
+          users.userRegister(this.registerInfo).then((res) => {
+            if (res.code == 200) {
+              this.registerInfo = {
+                email: "",
+                password: "",
+                code: "string",
+              };
+              this.$notify({
+                title: "成功",
+                message: "註冊成功！",
+                type: "success",
+                duration: 2000,
+              });
+            } else {
+              this.$notify({
+                title: "錯誤",
+                message: res.message,
+                type: "error",
+                duration: 2000,
+              });
+            }
+          });
+        }
+      });
     },
 
     onSignInSuccess(googleUser) {
@@ -337,6 +375,8 @@ $supColor: #efdbc1;
         }
 
         &__form {
+          margin-top: 8px;
+
           i {
             background-color: #555;
             border-radius: 100%;

@@ -24,6 +24,14 @@ export function add(data) {
   })
 }
 
+export function userRegister(data) {
+  return request({
+    url: '/users/UserRegister',
+    method: 'post',
+    data
+  })
+}
+
 export function update(data) {
   return request({
     url: '/users/addorupdate',
