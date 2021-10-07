@@ -51,7 +51,7 @@
           <div class="loginCard__operate loginCard__operate--white">
             <el-checkbox v-model="rememberMe" @change="rememberUser">記住帳密</el-checkbox>
 
-            <a>忘記密碼</a>
+            <a @click="forgetPassword()">忘記密碼</a>
           </div>
         </div>
 
@@ -66,6 +66,7 @@
                   <i class="el-icon-arrow-right"></i>
                   <strong>電子郵件</strong>
                 </template>
+                <el-button slot="append" @click="sendCode(registerInfo.email)">傳送驗證碼</el-button>
               </el-input>
             </el-form-item>
 
@@ -74,6 +75,15 @@
                 <template slot="prepend">
                   <i class="el-icon-arrow-right"></i>
                   <strong>建立密碼</strong>
+                </template>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item prop="code">
+              <el-input size="small" placeholder="請輸入驗證碼" v-model="registerInfo.code">
+                <template slot="prepend">
+                  <i class="el-icon-arrow-right"></i>
+                  <strong>驗證碼</strong>
                 </template>
               </el-input>
             </el-form-item>
@@ -89,6 +99,28 @@
         </div>
       </div>
     </div>
+
+    <!-- dialog -->
+    <el-dialog title="忘記密碼" :visible.sync="dialogVisible" width="40%">
+      <!-- <el-form :model="registerInfo" ref="ruleForm" :rules="rules" class="loginCard__form">
+        <el-form-item prop="email">
+          <el-input size="small" type="email" placeholder="請輸入電子郵件" v-model="registerInfo.email">
+            <template slot="prepend">
+              <i class="el-icon-arrow-right"></i>
+              <strong>電子郵件</strong>
+            </template>
+            <el-button slot="append" @click="sendCode(registerInfo.email)">傳送驗證碼</el-button>
+          </el-input>
+        </el-form-item>
+      </el-form> -->
+      <label>請輸入您的電子信箱</label>
+      <el-input size="small" v-model="yourEmail"></el-input>
+
+      <span slot="footer">
+        <el-button @click="dialogVisible = false" size="small">取消</el-button>
+        <el-button type="primary" @click="setNewPassword()" size="small">確定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -120,11 +152,12 @@ export default {
       registerInfo: {
         email: "",
         password: "",
-        code: "string",
+        code: "",
       },
       rules: {
         email: [{ required: true, validator: checkEmail, trigger: "blur" }],
         password: [{ required: true, message: "必填欄位", trigger: "blur" }],
+        code: [{ required: true, message: "必填欄位", trigger: "blur" }],
       },
       agreeTerms: false,
 
@@ -132,6 +165,10 @@ export default {
         client_id:
           "752935186531-t976aejd5qtanbo6dk17e1g3nna7igv3.apps.googleusercontent.com",
       },
+
+      // dialog
+      dialogVisible: false,
+      yourEmail: "",
     };
   },
   methods: {
@@ -179,36 +216,48 @@ export default {
       }
     },
     register() {
-      this.$refs["ruleForm"].validate((valid) => {
-        if (valid) {
-          users.userRegister(this.registerInfo).then((res) => {
-            if (res.code == 200) {
-              this.registerInfo = {
-                email: "",
-                password: "",
-                code: "string",
-              };
-              this.$notify({
-                title: "成功",
-                message: "註冊成功！",
-                type: "success",
-                duration: 2000,
-              });
-            } else {
-              this.$notify({
-                title: "錯誤",
-                message: res.message,
-                type: "error",
-                duration: 2000,
-              });
-            }
-          });
-        }
-      });
+      console.log(this.registerInfo);
+      // this.$refs["ruleForm"].validate((valid) => {
+      //   if (valid) {
+      //     users.userRegister(this.registerInfo).then((res) => {
+      //       if (res.code == 200) {
+      //         this.registerInfo = {
+      //           email: "",
+      //           password: "",
+      //           code: "",
+      //         };
+      //         this.$notify({
+      //           title: "成功",
+      //           message: "註冊成功！",
+      //           type: "success",
+      //           duration: 2000,
+      //         });
+      //       } else {
+      //         this.$notify({
+      //           title: "錯誤",
+      //           message: res.message,
+      //           type: "error",
+      //           duration: 2000,
+      //         });
+      //       }
+      //     });
+      //   }
+      // });
+    },
+    // 忘記密碼
+    forgetPassword() {
+      console.log(this.loginInfo.username);
+      this.yourEmail = this.loginInfo.username;
+      this.dialogVisible = true;
+    },
+    // 傳送驗證碼
+    sendCode(email) {
+      users.EmailVerifySend({ email: email });
     },
 
     onSignInSuccess(googleUser) {
-      const getIdToken = googleUser.Xb?.id_token;
+      const getIdToken = googleUser.$b?.id_token;
+      // console.log(googleUser, getIdToken);
 
       this.$store.dispatch("GoogleLogin", getIdToken).then(() => {
         this.$notify({
@@ -218,6 +267,27 @@ export default {
           duration: 2000,
         });
         this.$router.push({ path: "/" });
+      });
+    },
+
+    setNewPassword() {
+      users.ForgetPwd({ email: this.yourEmail }).then((res) => {
+        if (res.code == 200) {
+          this.$notify({
+            title: "成功",
+            message: "請至電子新信箱收信後再重新登入",
+            type: "success",
+            duration: 3000,
+          });
+        } else {
+          this.$notify({
+            title: "錯誤",
+            message: res.message,
+            type: "error",
+            duration: 2000,
+          });
+        }
+        this.dialogVisible = false;
       });
     },
   },

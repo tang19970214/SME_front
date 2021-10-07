@@ -87,3 +87,19 @@ export function ExportUserByAdmin(params) {
     params
   })
 }
+
+export function EmailVerifySend(params) {
+  return request({
+    url: '/Users/EmailVerifySend',
+    method: 'get',
+    params
+  })
+}
+
+export function ForgetPwd(params) {
+  return request({
+    url: '/Users/ForgetPwd',
+    method: 'get',
+    params
+  })
+}
