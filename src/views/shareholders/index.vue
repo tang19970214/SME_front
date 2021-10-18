@@ -55,7 +55,9 @@ export default {
   methods: {
     getList() {
       company
-        .getCompanyShareHolders({ id: this.$store.state.user.userInfo.id })
+        .getCompanyShareHolders({
+          CompanyId: this.$store.state.user.userInfo.id,
+        })
         .then((res) => {
           res.data.forEach((it, idx) => {
             this.tabsShareHoldersList?.push({
@@ -94,6 +96,10 @@ export default {
 
     addOrUpdate() {
       this.temp = this.tabsShareHoldersList.map((i) => i.shareHoldersItems);
+      this.temp.map((res) => {
+        res.companyId = this.$store.state.user.userInfo.id;
+        return res;
+      });
       company.addOrUpdateCompanyShareHolders(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({

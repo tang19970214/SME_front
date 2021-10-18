@@ -66,7 +66,7 @@
                   <i class="el-icon-arrow-right"></i>
                   <strong>電子郵件</strong>
                 </template>
-                <el-button slot="append" @click="sendCode(registerInfo.email)">傳送驗證碼</el-button>
+                <el-button :style="{'color': timer !==null ? 'gray' : 'black'}" slot="append" @click="sendCode(registerInfo.email)" :disabled="timer !== null">{{reciprocalTime == 30 ? "" : `${reciprocalTime} `}}傳送驗證碼</el-button>
               </el-input>
             </el-form-item>
 
@@ -166,6 +166,9 @@ export default {
           "752935186531-t976aejd5qtanbo6dk17e1g3nna7igv3.apps.googleusercontent.com",
       },
 
+      timer: null,
+      reciprocalTime: 30,
+
       // dialog
       dialogVisible: false,
       yourEmail: "",
@@ -216,43 +219,52 @@ export default {
       }
     },
     register() {
-      console.log(this.registerInfo);
-      // this.$refs["ruleForm"].validate((valid) => {
-      //   if (valid) {
-      //     users.userRegister(this.registerInfo).then((res) => {
-      //       if (res.code == 200) {
-      //         this.registerInfo = {
-      //           email: "",
-      //           password: "",
-      //           code: "",
-      //         };
-      //         this.$notify({
-      //           title: "成功",
-      //           message: "註冊成功！",
-      //           type: "success",
-      //           duration: 2000,
-      //         });
-      //       } else {
-      //         this.$notify({
-      //           title: "錯誤",
-      //           message: res.message,
-      //           type: "error",
-      //           duration: 2000,
-      //         });
-      //       }
-      //     });
-      //   }
-      // });
+      // console.log(this.registerInfo);
+      this.$refs["ruleForm"].validate((valid) => {
+        if (valid) {
+          users.userRegister(this.registerInfo).then((res) => {
+            if (res.code == 200) {
+              this.registerInfo = {
+                email: "",
+                password: "",
+                code: "",
+              };
+              this.$notify({
+                title: "成功",
+                message: "註冊成功，請使用新的帳密進行登入！",
+                type: "success",
+                duration: 2000,
+              });
+            } else {
+              this.$notify({
+                title: "錯誤",
+                message: res.message,
+                type: "error",
+                duration: 2000,
+              });
+            }
+          });
+        }
+      });
     },
     // 忘記密碼
     forgetPassword() {
-      console.log(this.loginInfo.username);
       this.yourEmail = this.loginInfo.username;
       this.dialogVisible = true;
     },
     // 傳送驗證碼
     sendCode(email) {
       users.EmailVerifySend({ email: email });
+      this.timer = setInterval(this.countTimer, 1000);
+    },
+    countTimer() {
+      if (this.reciprocalTime == 0) {
+        clearInterval(this.timer);
+        this.reciprocalTime = 30;
+        this.timer = null;
+      } else {
+        this.reciprocalTime--;
+      }
     },
 
     onSignInSuccess(googleUser) {
@@ -296,6 +308,9 @@ export default {
     if (!!window.localStorage.getItem("userInfo")) {
       this.rememberMe = true;
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 };
 </script>

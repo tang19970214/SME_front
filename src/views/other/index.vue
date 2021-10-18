@@ -92,6 +92,7 @@ export default {
           this.defaultOtherName =
             res.result.companyGovSubsidyPlanItems?.length + 1 || 1;
           this.temp = Object.assign({}, res.result);
+          this.temp.id = this.$store.state.user.userInfo.id;
         });
     },
 

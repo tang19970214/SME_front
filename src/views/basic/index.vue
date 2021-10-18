@@ -137,19 +137,22 @@ export default {
         .getUserExts({ id: this.$store.state.user.userInfo.id })
         .then((res) => {
           this.temp = Object.assign({}, res.result);
+          this.temp.id = this.$store.state.user.userInfo.id;
+          this.temp.email = this.$store.state.user.userInfo.account;
         });
     },
 
     addOrUpdate() {
       console.log(this.temp);
+      this.temp.id = this.$store.state.user.userInfo.id;
       this.temp.businessStageItems =
-        this.temp.businessStageItems.length == 0
-          ? null
-          : this.temp.businessStageItems;
+        this.temp.businessStageItems?.length > 0
+          ? this.temp.businessStageItems
+          : null;
       this.temp.industryTypeItems =
-        this.temp.industryTypeItems.length == 0
-          ? null
-          : this.temp.industryTypeItems;
+        this.temp.industryTypeItems?.length > 0
+          ? this.temp.industryTypeItems
+          : null;
       company.addOrUpdateUserExts(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({

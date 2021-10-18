@@ -82,6 +82,7 @@ export default {
           this.defaultTeamsName =
             res.result.companyTeamMemberItems?.length + 1 || 1;
           this.temp = Object.assign({}, res.result);
+          this.temp.id = this.$store.state.user.userInfo.id;
         });
     },
 

@@ -47,7 +47,7 @@ const user = {
     // Google登入
     GoogleLogin({ commit }, token_id) {
       return new Promise((resolve, reject) => {
-        GoogleLogin({token_id: token_id, appkey: "admin"}).then((res) => {
+        GoogleLogin({token_id: token_id, appkey: "sme"}).then((res) => {
           setToken(res.token)
           commit('SET_TOKEN', res.token)
           resolve()

@@ -126,6 +126,7 @@ export default {
           this.defaultOperationsName =
             res.result.companyStockItmes?.length + 1 || 1;
           this.temp = Object.assign({}, res.result);
+          this.temp.id = this.$store.state.user.userInfo.id;
         });
     },
 
@@ -159,11 +160,11 @@ export default {
         (i) => i.operationsYearList
       );
       this.temp.businessStageItems =
-        this.temp.businessStageItems.length == 0
+        this.temp.businessStageItems?.length == 0
           ? null
           : this.temp.businessStageItems;
       this.temp.industryTypeItems =
-        this.temp.industryTypeItems.length == 0
+        this.temp.industryTypeItems?.length == 0
           ? null
           : this.temp.industryTypeItems;
       company.addOrUpdateCompanyOperations(this.temp).then((res) => {

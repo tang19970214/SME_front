@@ -128,6 +128,7 @@ export default {
         .getCompanys({ id: this.$store.state.user.userInfo.id })
         .then((res) => {
           this.temp = Object.assign({}, res.result);
+          this.temp.id = this.$store.state.user.userInfo.id;
         });
     },
 
