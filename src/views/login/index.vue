@@ -142,6 +142,23 @@ export default {
         }
       }, 100);
     };
+    let checkPWD = (rule, value, callback) => {
+      // 至少12碼、英文、大小寫、特殊符號混合
+      if (value) {
+        let reg1 = new RegExp(
+          /^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*?])[A-Za-z!@#$%^&*?]{12,}$/
+        );
+        if (value.search(reg1) !== -1) {
+          return callback();
+        } else {
+          return callback(
+            new Error("密碼格式錯誤，至少12碼、英文大小寫、特殊符號混合")
+          );
+        }
+      } else {
+        return callback(new Error("必填欄位"));
+      }
+    };
     return {
       loginInfo: {
         username: "",
@@ -156,7 +173,7 @@ export default {
       },
       rules: {
         email: [{ required: true, validator: checkEmail, trigger: "blur" }],
-        password: [{ required: true, message: "必填欄位", trigger: "blur" }],
+        password: [{ required: true, validator: checkPWD }],
         code: [{ required: true, message: "必填欄位", trigger: "blur" }],
       },
       agreeTerms: false,
