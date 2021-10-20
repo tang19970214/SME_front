@@ -285,7 +285,7 @@ export default {
     },
 
     onSignInSuccess(googleUser) {
-      const getIdToken = googleUser.$b?.id_token;
+      const getIdToken = googleUser.Zb.id_token || googleUser.$b.id_token;
       // console.log(googleUser, getIdToken);
 
       this.$store.dispatch("GoogleLogin", getIdToken).then(() => {

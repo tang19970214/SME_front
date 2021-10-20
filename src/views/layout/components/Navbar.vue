@@ -9,8 +9,11 @@
     <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
 
     <div class="avatar-container">
-      <div class="avatar-wrapper">
+      <div class="avatar-wrapper flex-items-c-justify-c">
         歡迎您，{{name}}
+        <g-signin-button class="googleBtn mx-8" :params="googleSignInParams" @success="handleGoogleBind">
+          <span>綁定Google</span>
+        </g-signin-button>
         <button class="avatar-wrapper-btn" @click="logout()">登出</button>
       </div>
     </div>
@@ -22,7 +25,7 @@ import { mapGetters, mapActions } from "vuex";
 import Hamburger from "@/components/Hamburger";
 import logo from "@/assets/logo.png?imageView2/1/w/80/h/80";
 
-// import * as login from "@/api/login";
+import * as login from "@/api/login";
 
 export default {
   data: function () {
@@ -83,27 +86,27 @@ export default {
     // handleGoProfile() {
     //   this.$router.push("/profile");
     // },
-    // handleGoogleBind(googleUser) {
-    //   const getIdToken = googleUser.Zb.id_token;
-    //   login.GoogleBind({ token_id: getIdToken }).then((res) => {
-    //     if (res.code == 200) {
-    //       this.$notify({
-    //         title: "成功",
-    //         message: "綁定成功",
-    //         type: "success",
-    //         duration: 2000,
-    //       });
-    //     } else {
-    //       this.$notify({
-    //         title: "錯誤",
-    //         message: res.message,
-    //         type: "error",
-    //         duration: 2000,
-    //       });
-    //     }
-    //     console.log(res);
-    //   });
-    // },
+    handleGoogleBind(googleUser) {
+      const getIdToken = googleUser.Zb.id_token || googleUser.$b.id_token;
+      login.GoogleBind({ token_id: getIdToken }).then((res) => {
+        if (res.code == 200) {
+          this.$notify({
+            title: "成功",
+            message: "綁定成功",
+            type: "success",
+            duration: 2000,
+          });
+        } else {
+          this.$notify({
+            title: "錯誤",
+            message: res.message,
+            type: "error",
+            duration: 2000,
+          });
+        }
+        // console.log(res);
+      });
+    },
     // onSignInError(error) {
     //   console.log("OH NOES", error);
     // },
@@ -121,4 +124,24 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.mx-8 {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.googleBtn {
+  background: #0161a5;
+  padding: 0 8px;
+  font-size: 12px;
+  height: 21px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.5s;
+
+  &:hover {
+    background: #0076c8;
+  }
+}
 </style>
