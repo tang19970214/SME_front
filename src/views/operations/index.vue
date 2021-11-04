@@ -53,7 +53,7 @@
 
     <div class="pageOperations__btns">
       <el-button @click="$router.push('/')">取消</el-button>
-      <el-button type="primary" @click="addOrUpdate()">確認</el-button>
+      <el-button type="primary" @click="addOrUpdate()" :loading="btnLoading">確認</el-button>
     </div>
   </div>
 </template>
@@ -85,6 +85,8 @@ export default {
       operationsYear: "",
       tabsOperationsList: [],
       defaultOperationsName: 0,
+
+      btnLoading: false,
     };
   },
   computed: {
@@ -111,12 +113,11 @@ export default {
       });
     },
 
-    getList() {
-      company
+    async getList() {
+      await company
         .getCompanyOperations({ id: this.$store.state.user.userInfo.id })
         .then((res) => {
           res.result.companyStockItmes?.forEach((it, idx) => {
-            console.log(it);
             this.tabsOperationsList.push({
               title: it.year,
               name: String(idx + 1),
@@ -130,9 +131,9 @@ export default {
         });
     },
 
-    addTabOperations() {
+    addTabOperations(txt) {
       this.tabsOperationsList.push({
-        title: this.operationsYear,
+        title: txt || this.operationsYear,
         name: String(this.defaultOperationsName),
         operationsYearList: {
           year: this.operationsYear,
@@ -155,7 +156,8 @@ export default {
       this.tabsOperationsValue = this.tabsOperationsList[0].name;
     },
 
-    addOrUpdate() {
+    async addOrUpdate() {
+      this.btnLoading = true;
       this.temp.companyStockItmes = this.tabsOperationsList.map(
         (i) => i.operationsYearList
       );
@@ -167,7 +169,7 @@ export default {
         this.temp.industryTypeItems?.length == 0
           ? null
           : this.temp.industryTypeItems;
-      company.addOrUpdateCompanyOperations(this.temp).then((res) => {
+      await company.addOrUpdateCompanyOperations(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({
             title: "成功",
@@ -183,12 +185,19 @@ export default {
             duration: 2000,
           });
         }
+
+        setTimeout(() => {
+          this.btnLoading = false;
+        }, 2000);
       });
     },
   },
-  mounted() {
+  async mounted() {
     this.getIncomeModelItemsList();
-    this.getList();
+    await this.getList();
+    if (this.tabsOperationsList.length === 0) {
+      this.addTabOperations("範例");
+    }
   },
 };
 </script>

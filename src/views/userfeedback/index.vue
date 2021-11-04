@@ -18,7 +18,7 @@
 
     <div class="pageUserFeedBack__btns">
       <el-button @click="$router.push('/')">取消</el-button>
-      <el-button type="primary" @click="saveFeedback()">確認</el-button>
+      <el-button type="primary" @click="saveFeedback()" :loading="btnLoading" :disabled="!temp.typeName || !temp.summary || !temp.sysFeedBack">確認</el-button>
     </div>
   </div>
 </template>
@@ -43,6 +43,8 @@ export default {
         status: "",
       },
       rules: {},
+
+      btnLoading: false,
     };
   },
   methods: {
@@ -57,12 +59,13 @@ export default {
       });
     },
 
-    saveFeedback() {
-      feedback.add(this.temp).then((res) => {
+    async saveFeedback() {
+      this.btnLoading = true;
+      await feedback.add(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({
             title: "成功",
-            message: "新增成功",
+            message: "已通知管理員，會盡快以Mail的方式回覆您的問題!",
             type: "success",
             duration: 2000,
           });
@@ -74,6 +77,7 @@ export default {
             duration: 2000,
           });
         }
+        this.btnLoading = false;
       });
     },
   },

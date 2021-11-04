@@ -37,7 +37,7 @@
 
     <div class="pageOperations__btns">
       <el-button @click="$router.push('/')">取消</el-button>
-      <el-button type="primary" @click="addOrUpdate()">確認</el-button>
+      <el-button type="primary" @click="addOrUpdate()" :loading="btnLoading">確認</el-button>
     </div>
   </div>
 </template>
@@ -65,11 +65,13 @@ export default {
       teamsName: "",
       tabsTeamsList: [],
       defaultTeamsName: 0,
+
+      btnLoading: false,
     };
   },
   methods: {
-    getList() {
-      company
+    async getList() {
+      await company
         .getCompanyTeams({ id: this.$store.state.user.userInfo.id })
         .then((res) => {
           res.result.companyTeamMemberItems?.forEach((it, idx) => {
@@ -86,9 +88,9 @@ export default {
         });
     },
 
-    addTabTeams() {
+    addTabTeams(txt) {
       this.tabsTeamsList.push({
-        title: this.teamsName,
+        title: txt || this.teamsName,
         name: String(this.defaultTeamsName),
         companyTeamMemberItems: {
           memberName: this.teamsName,
@@ -108,11 +110,12 @@ export default {
       this.tabsTeamsValue = this.tabsTeamsList[0].name;
     },
 
-    addOrUpdate() {
+    async addOrUpdate() {
+      this.btnLoading = true;
       this.temp.companyTeamMemberItems = this.tabsTeamsList.map(
         (i) => i.companyTeamMemberItems
       );
-      company.addOrUpdateCompanyTeams(this.temp).then((res) => {
+      await company.addOrUpdateCompanyTeams(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({
             title: "成功",
@@ -128,11 +131,18 @@ export default {
             duration: 2000,
           });
         }
+
+        setTimeout(() => {
+          this.btnLoading = false;
+        }, 2000);
       });
     },
   },
-  mounted() {
-    this.getList();
+  async mounted() {
+    await this.getList();
+    if (this.tabsTeamsList.length === 0) {
+      this.addTabTeams("範例");
+    }
   },
 };
 </script>

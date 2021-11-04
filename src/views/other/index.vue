@@ -49,7 +49,7 @@
 
     <div class="pageOther__btns">
       <el-button @click="$router.push('/')">取消</el-button>
-      <el-button type="primary" @click="addOrUpdate()">確認</el-button>
+      <el-button type="primary" @click="addOrUpdate()" :loading="btnLoading">確認</el-button>
     </div>
   </div>
 </template>
@@ -75,11 +75,13 @@ export default {
       otherName: "",
       tabsOtherList: [],
       defaultOtherName: 0,
+
+      btnLoading: false,
     };
   },
   methods: {
-    getList() {
-      company
+    async getList() {
+      await company
         .getCompanyOtherss({ id: this.$store.state.user.userInfo.id })
         .then((res) => {
           res.result.companyGovSubsidyPlanItems?.forEach((it, idx) => {
@@ -96,9 +98,9 @@ export default {
         });
     },
 
-    addTabOther() {
+    addTabOther(txt) {
       this.tabsOtherList.push({
-        title: this.otherName,
+        title: txt || this.otherName,
         name: String(this.defaultOtherName),
         companyGovSubsidyPlanItems: {
           year: "",
@@ -119,11 +121,12 @@ export default {
       this.tabsOtherValue = this.tabsOtherList[0].name;
     },
 
-    addOrUpdate() {
+    async addOrUpdate() {
+      this.btnLoading = true;
       this.temp.companyGovSubsidyPlanItems = this.tabsOtherList.map(
         (i) => i.companyGovSubsidyPlanItems
       );
-      company.addOrUpdateCompanyOtherss(this.temp).then((res) => {
+      await company.addOrUpdateCompanyOtherss(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({
             title: "成功",
@@ -139,11 +142,16 @@ export default {
             duration: 2000,
           });
         }
+
+        setTimeout(() => {
+          this.btnLoading = false;
+        }, 2000);
       });
     },
   },
-  mounted() {
-    this.getList();
+  async mounted() {
+    await this.getList();
+    this.addTabOther("範例");
   },
 };
 </script>

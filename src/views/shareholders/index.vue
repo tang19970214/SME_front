@@ -30,7 +30,7 @@
 
     <div class="pageShareHolders__btns">
       <el-button @click="$router.push('/')">取消</el-button>
-      <el-button type="primary" @click="addOrUpdate()">確認</el-button>
+      <el-button type="primary" @click="addOrUpdate()" :loading="btnLoading">確認</el-button>
     </div>
   </div>
 </template>
@@ -50,11 +50,13 @@ export default {
       shareHoldersName: "",
       tabsShareHoldersList: [],
       defaultShareHoldersName: 0,
+
+      btnLoading: false,
     };
   },
   methods: {
-    getList() {
-      company
+    async getList() {
+      await company
         .getCompanyShareHolders({
           CompanyId: this.$store.state.user.userInfo.id,
         })
@@ -70,9 +72,9 @@ export default {
         });
     },
 
-    addTabShareHolders() {
+    addTabShareHolders(txt) {
       this.tabsShareHoldersList.push({
-        title: this.shareHoldersName,
+        title: txt || this.shareHoldersName,
         name: String(this.defaultShareHoldersName),
         shareHoldersItems: {
           //   companyId: this.chooseInfo.id,
@@ -94,13 +96,14 @@ export default {
       this.tabsShareHoldersValue = this.tabsShareHoldersList[0].name;
     },
 
-    addOrUpdate() {
+    async addOrUpdate() {
+      this.btnLoading = true;
       this.temp = this.tabsShareHoldersList.map((i) => i.shareHoldersItems);
       this.temp.map((res) => {
         res.companyId = this.$store.state.user.userInfo.id;
         return res;
       });
-      company.addOrUpdateCompanyShareHolders(this.temp).then((res) => {
+      await company.addOrUpdateCompanyShareHolders(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({
             title: "成功",
@@ -116,11 +119,18 @@ export default {
             duration: 2000,
           });
         }
+
+        setTimeout(() => {
+          this.btnLoading = false;
+        }, 2000);
       });
     },
   },
-  mounted() {
-    this.getList();
+  async mounted() {
+    await this.getList();
+    if (this.tabsShareHoldersList.length === 0) {
+      this.addTabShareHolders("範例");
+    }
   },
 };
 </script>

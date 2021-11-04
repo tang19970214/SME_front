@@ -130,7 +130,7 @@ import * as users from "@/api/users";
 export default {
   data() {
     let checkEmail = (rule, value, callback) => {
-      const mail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      const mail = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
       if (!value) {
         return callback(new Error("請填寫註冊線上課程之電子信箱"));
       }

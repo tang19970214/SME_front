@@ -53,7 +53,7 @@
 
     <div class="pageBasic__btns">
       <el-button @click="$router.push('/')">取消</el-button>
-      <el-button type="primary" @click="addOrUpdate()">確認</el-button>
+      <el-button type="primary" @click="addOrUpdate()" :loading="btnLoading">確認</el-button>
     </div>
   </div>
 </template>
@@ -91,6 +91,8 @@ export default {
         industryTypeOther: "",
       },
       rules: {},
+
+      btnLoading: false,
     };
   },
   computed: {
@@ -142,8 +144,8 @@ export default {
         });
     },
 
-    addOrUpdate() {
-      console.log(this.temp);
+    async addOrUpdate() {
+      this.btnLoading = true;
       this.temp.id = this.$store.state.user.userInfo.id;
       this.temp.businessStageItems =
         this.temp.businessStageItems?.length > 0
@@ -153,7 +155,7 @@ export default {
         this.temp.industryTypeItems?.length > 0
           ? this.temp.industryTypeItems
           : null;
-      company.addOrUpdateUserExts(this.temp).then((res) => {
+      await company.addOrUpdateUserExts(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({
             title: "成功",
@@ -169,6 +171,10 @@ export default {
             duration: 2000,
           });
         }
+
+        setTimeout(() => {
+          this.btnLoading = false;
+        }, 2000);
       });
     },
   },

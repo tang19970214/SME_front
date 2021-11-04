@@ -6,7 +6,7 @@
     <div class="pageRecommend__card" v-for="item in planssList" :key="item">
       <!-- 計畫種類 -->
       <div class="pageRecommend__card--header">
-        <strong>{{item.planType}}</strong>
+        <strong>{{item.planType === "不限" ? "不限對象" : item.planType}}</strong>
       </div>
       <div class="pageRecommend__card--body">
         <div class="company">
@@ -18,7 +18,7 @@
             <!-- 即將受理 -->
             <span class="company__tags--mainColor" v-if="!!item.planState">{{item.planState}}</span>
             <!-- 顯示地區名 -->
-            <span class="company__tags--subColor" v-if="!!item.planArea">{{item.planArea}}</span>
+            <span class="company__tags--subColor" v-if="!!item.planArea">{{item.planArea === "不限" ? "不限地區" : item.planArea}}</span>
             <!-- 顯示對象名 -->
             <span class="company__tags--subColor" v-if="!!item.planObject">{{item.planObject}}</span>
           </div>

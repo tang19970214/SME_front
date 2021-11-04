@@ -67,7 +67,7 @@
 
     <div class="pageDeveloping__btns">
       <el-button @click="$router.push('/')">取消</el-button>
-      <el-button type="primary" @click="addOrUpdate()">確認</el-button>
+      <el-button type="primary" @click="addOrUpdate()" :loading="btnLoading">確認</el-button>
     </div>
   </div>
 </template>
@@ -113,6 +113,8 @@ export default {
         ],
       },
       rules: {},
+
+      btnLoading: false,
     };
   },
   computed: {
@@ -132,9 +134,9 @@ export default {
         });
     },
 
-    addOrUpdate() {
-      console.log(this.temp);
-      company.addOrUpdateCompanys(this.temp).then((res) => {
+    async addOrUpdate() {
+      this.btnLoading = true;
+      await company.addOrUpdateCompanys(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({
             title: "成功",
@@ -150,6 +152,10 @@ export default {
             duration: 2000,
           });
         }
+
+        setTimeout(() => {
+          this.btnLoading = false;
+        }, 2000);
       });
     },
 

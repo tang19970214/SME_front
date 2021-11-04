@@ -22,12 +22,12 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="Q2.2 公司登記日期" prop="Q3">
+        <el-form-item label="Q2.2 公司登記日期" prop="Q3" v-if="temp.Q2 == '是'">
           <el-date-picker class="w-full" v-model="temp.Q3" type="date" placeholder="請選擇日期" value-format="yyyy-MM-dd" :picker-options="disAfterDate" size="small">
           </el-date-picker>
         </el-form-item>
 
-        <el-form-item label="Q2.3 公司登記地" prop="county">
+        <el-form-item label="Q2.3 公司登記地" prop="county" v-if="temp.Q2 == '是'">
           <el-select class="w-full" v-model="temp.county" placeholder="請選擇縣市" size="small">
             <el-option v-for="(item, idx) in countyData" :key="idx" :label="item.label" :value="item.value">
             </el-option>
@@ -38,11 +38,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="Q3. 主要產品/服務" v-if="temp.Q2 == '是'" prop="Q5" :rules="temp.Q2 == '是' ? rules.Q5 : [{ required: false }]">
+        <el-form-item label="Q3. 主要產品/服務" prop="Q5" :rules="temp.Q2 == '是' ? rules.Q5 : [{ required: false }]">
           <el-input size="small" class="w-full" v-model="temp.Q5"></el-input>
         </el-form-item>
 
-        <el-form-item label="Q4. 發展階段(多選)" v-if="temp.Q2 == '是'" prop="Q6" :rules="temp.Q2 == '是' ? rules.Q6 : [{ required: false }]">
+        <el-form-item label="Q4. 發展階段(多選)" prop="Q6" :rules="temp.Q2 == '是' ? rules.Q6 : [{ required: false }]">
           <el-select class="w-full" v-model="temp.Q6" size="small" multiple>
             <el-option label="尚無具體想法" value="尚無具體想法"></el-option>
             <el-option label="已有創業點子" value="已有創業點子"></el-option>
@@ -57,7 +57,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="Q5. 資金需求範圍" v-if="temp.Q2 == '是'" prop="Q7" :rules="temp.Q2 == '是' ? rules.Q7 : [{ required: false }]">
+        <el-form-item label="Q5. 資金需求範圍" prop="Q7" :rules="temp.Q2 == '是' ? rules.Q7 : [{ required: false }]">
           <el-select class="w-full" v-model="temp.Q7" size="small">
             <el-option label="50萬以下" value="50萬以下"></el-option>
             <el-option label="50-100萬" value="50-100萬"></el-option>
@@ -175,7 +175,7 @@ export default {
         if (valid) {
           this.temp.Q1 =
             this.temp.Q1.length > 0 ? this.temp.Q1.join(",") : "無";
-          this.temp.Q4 = `${this.temp.county}${this.temp.district}`;
+          this.temp.Q4 = `${this.temp.county}${this.temp.district}` || "無";
           this.temp.Q5 = this.temp.Q5 !== "" ? this.temp.Q5 : "無";
           this.temp.Q6 =
             this.temp.Q6.length > 0 ? this.temp.Q6.join(",") : "無";
