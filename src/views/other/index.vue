@@ -1,6 +1,6 @@
 <template>
   <div class="pageOther">
-    <Title title="經營團隊說明" />
+    <Title title="其他項目" />
 
     <el-form ref="ruleForm" :model="temp" label-width="230px" :rules="rules">
       <el-form-item size="small" :label="'是否有打算拓展海外市場'">
@@ -151,7 +151,9 @@ export default {
   },
   async mounted() {
     await this.getList();
-    this.addTabOther("範例");
+    if (this.tabsOtherList.length === 0) {
+      this.addTabOther("範例");
+    }
   },
 };
 </script>
