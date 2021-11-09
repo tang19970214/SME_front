@@ -146,7 +146,7 @@ export default {
       // 至少12碼、英文、大小寫、特殊符號混合
       if (value) {
         let reg1 = new RegExp(
-          /^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*?])[A-Za-z!@#$%^&*?]{12,}$/
+          /^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*?-_])[A-Za-z!@#$%^&*?-_]{12,}$/
         );
         if (value.search(reg1) !== -1) {
           return callback();
