@@ -145,14 +145,17 @@ export default {
     let checkPWD = (rule, value, callback) => {
       // 至少12碼、英文、大小寫、特殊符號混合
       if (value) {
+        // let reg1 = new RegExp(
+        //   /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*?-_])[0-9A-Za-z!@#$%^&*?-_]{12,}$/
+        // );
         let reg1 = new RegExp(
-          /^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*?-_])[A-Za-z!@#$%^&*?-_]{12,}$/
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&-_])[A-Za-z\d$@$!%*#?&-_]{12,}$/
         );
         if (value.search(reg1) !== -1) {
           return callback();
         } else {
           return callback(
-            new Error("密碼格式錯誤，至少12碼、英文大小寫、特殊符號混合")
+            new Error("密碼格式錯誤，至少12碼、英文大小寫、數字、特殊符號混合")
           );
         }
       } else {
