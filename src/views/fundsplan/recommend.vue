@@ -64,6 +64,10 @@
         </div>
       </div>
     </div>
+
+    <div class="pageRecommend__introduce">
+      <strong>若有更多問題，或是以上方案不符合需求，可撥打02-2586-5000#214 由專人為您服務。</strong>
+    </div>
   </div>
 </template>
 
@@ -257,6 +261,12 @@ export default {
         padding-left: 0;
       }
     }
+  }
+
+  &__introduce {
+    margin-top: 16px;
+    font-size: 18px;
+    color: #d34a4a;
   }
 }
 </style>

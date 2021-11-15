@@ -49,6 +49,19 @@
         </el-select>
         <el-input v-model="temp.industryTypeOther" placeholder="請輸入其他產業類別" v-if="getBasicOther()"></el-input>
       </el-form-item>
+      <el-form-item :label="'感興趣的資訊'">
+        <el-select class="filter-item w-full" v-model="temp.interestItems" placeholder="請選擇感興趣的資訊" multiple>
+          <el-option label="補助方案" value="補助方案"></el-option>
+          <el-option label="融資方案" value="融資方案"></el-option>
+          <el-option label="投資方案" value="投資方案"></el-option>
+          <el-option label="競賽資訊" value="競賽資訊"></el-option>
+          <el-option label="創業活動資訊" value="創業活動資訊"></el-option>
+          <el-option label="輔導計畫" value="輔導計畫"></el-option>
+          <el-option label="創業時事" value="創業時事"></el-option>
+          <el-option label="其他" value="其他"></el-option>
+        </el-select>
+        <el-input v-model="temp.interestOther" placeholder="請輸入其他感興趣的資訊" v-if="getInterestOther()"></el-input>
+      </el-form-item>
     </el-form>
 
     <div class="pageBasic__btns">
@@ -89,6 +102,8 @@ export default {
         businessStageItems: [],
         industryTypeItems: [],
         industryTypeOther: "",
+        interestItems: [],
+        interestOther: "",
       },
       rules: {},
 
@@ -107,6 +122,16 @@ export default {
           return true;
         } else {
           this.temp.industryTypeOther = "";
+          return false;
+        }
+      };
+    },
+    getInterestOther() {
+      return () => {
+        if (this.temp.interestItems?.includes("其他")) {
+          return true;
+        } else {
+          this.temp.interestOther = "";
           return false;
         }
       };
