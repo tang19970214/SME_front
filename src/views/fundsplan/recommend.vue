@@ -14,7 +14,7 @@
           <div class="company">
             <div class="w-full">
               <!-- 公司名 -->
-              <strong>{{item.planObject}}</strong>
+              <strong>{{item.planOrganizer}}</strong>
             </div>
             <div class="w-full company__tags">
               <!-- 即將受理 -->
@@ -42,6 +42,10 @@
         </div>
       </div>
 
+      <div class="pageRecommend__introduce">
+        <strong>若有更多問題，或是以上方案不符合需求，可撥打02-2586-5000#214 由專人為您服務。</strong>
+      </div>
+
       <div class="pageRecommend__btn">
         <button @click="$router.push('/fundsplan/index')">返回</button>
       </div>
@@ -63,10 +67,6 @@
           </ul>
         </div>
       </div>
-    </div>
-
-    <div class="pageRecommend__introduce">
-      <strong>若有更多問題，或是以上方案不符合需求，可撥打02-2586-5000#214 由專人為您服務。</strong>
     </div>
   </div>
 </template>
