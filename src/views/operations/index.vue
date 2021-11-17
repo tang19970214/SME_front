@@ -36,10 +36,10 @@
             <el-input v-model="items.operationsYearList.businessAmount"></el-input>
           </el-form-item>
           <el-form-item size="small" :label="'年度毛利率'">
-            <el-input v-model="items.operationsYearList.grossMarginRate"></el-input>
+            <el-input v-model="items.operationsYearList.grossMarginRate" placeholder="請用0.xxx表示，請勿使用%否則會存失敗"></el-input>
           </el-form-item>
           <el-form-item size="small" :label="'年度淨利率'">
-            <el-input v-model="items.operationsYearList.profitMargin"></el-input>
+            <el-input v-model="items.operationsYearList.profitMargin" placeholder="請用0.xxx表示，請勿使用%否則會存失敗"></el-input>
           </el-form-item>
           <el-form-item size="small" :label="'年度每股淨值'">
             <el-input v-model="items.operationsYearList.pbr"></el-input>
