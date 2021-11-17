@@ -105,7 +105,7 @@ export default {
         companyGovSubsidyPlanItems: {
           year: "",
           unit: "",
-          name: this.otherName,
+          name: txt || this.otherName,
           summary: "",
         },
       });

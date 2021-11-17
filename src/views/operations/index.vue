@@ -136,7 +136,7 @@ export default {
         title: txt || this.operationsYear,
         name: String(this.defaultOperationsName),
         operationsYearList: {
-          year: this.operationsYear,
+          year: txt || this.operationsYear,
           businessAmount: 0,
           grossMarginRate: 0,
           profitMargin: 0,

@@ -93,7 +93,7 @@ export default {
         title: txt || this.teamsName,
         name: String(this.defaultTeamsName),
         companyTeamMemberItems: {
-          memberName: this.teamsName,
+          memberName: txt || this.teamsName,
           memberExperience: "",
           memberExpertise: "",
         },

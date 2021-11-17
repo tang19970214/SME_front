@@ -78,7 +78,7 @@ export default {
         name: String(this.defaultShareHoldersName),
         shareHoldersItems: {
           //   companyId: this.chooseInfo.id,
-          name: this.shareHoldersName,
+          name: txt || this.shareHoldersName,
           stockCount: 0,
           stockRate: 0,
           capital: 0,
