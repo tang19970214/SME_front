@@ -18,7 +18,7 @@
             <el-input v-model="items.shareHoldersItems.stockCount"></el-input>
           </el-form-item>
           <el-form-item size="small" :label="'持股比例'">
-            <el-input v-model="items.shareHoldersItems.stockRate"></el-input>
+            <el-input v-model="items.shareHoldersItems.stockRate" placeholder="請用0.xxx表示，請勿使用%否則會存失敗"></el-input>
           </el-form-item>
           <el-form-item size="small" :label="'出資額度'">
             <el-input v-model="items.shareHoldersItems.capital"></el-input>
