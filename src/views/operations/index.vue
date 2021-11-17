@@ -138,8 +138,8 @@ export default {
         operationsYearList: {
           year: txt || this.operationsYear,
           businessAmount: 0,
-          grossMarginRate: 0,
-          profitMargin: 0,
+          grossMarginRate: "",
+          profitMargin: "",
           pbr: 0,
           eps: 0,
         },

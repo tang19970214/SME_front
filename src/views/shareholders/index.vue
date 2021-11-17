@@ -80,7 +80,7 @@ export default {
           //   companyId: this.chooseInfo.id,
           name: txt || this.shareHoldersName,
           stockCount: 0,
-          stockRate: 0,
+          stockRate: "",
           capital: 0,
         },
       });
