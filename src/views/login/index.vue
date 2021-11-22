@@ -288,8 +288,16 @@ export default {
     },
 
     onSignInSuccess(googleUser) {
-      const getIdToken = googleUser.Zb.id_token || googleUser.$b.id_token;
-      // console.log(googleUser, getIdToken);
+      const getKeys = Object.keys(googleUser);
+
+      let getIdToken = "";
+      getKeys.forEach((k) => {
+        // eslint-disable-next-line
+        if (!!googleUser[k].id_token) {
+          getIdToken = googleUser[k].id_token;
+        }
+      });
+      // const getIdToken = googleUser.Zb?.id_token || googleUser.$b?.id_token || googleUser.wb?.id_token;
 
       this.$store.dispatch("GoogleLogin", getIdToken).then(() => {
         this.$notify({
