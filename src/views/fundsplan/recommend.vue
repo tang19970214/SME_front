@@ -41,14 +41,6 @@
           </div>
         </div>
       </div>
-
-      <div class="pageRecommend__introduce">
-        <strong>若有更多問題，或是以上方案不符合需求，可撥打02-2586-5000#214 由專人為您服務。</strong>
-      </div>
-
-      <div class="pageRecommend__btn">
-        <button @click="$router.push('/fundsplan/index')">返回</button>
-      </div>
     </div>
 
     <div v-else>
@@ -67,6 +59,14 @@
           </ul>
         </div>
       </div>
+    </div>
+
+    <div class="pageRecommend__introduce">
+      <strong>若有更多問題，或是以上方案不符合需求，可撥打02-2586-5000#214 由專人為您服務。</strong>
+    </div>
+
+    <div class="pageRecommend__btn">
+      <button @click="$router.push('/fundsplan/index')">返回</button>
     </div>
   </div>
 </template>
