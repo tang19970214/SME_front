@@ -790,7 +790,7 @@ export default {
         console.log(data);
 
         const url =
-          "http://sme.yummydesign.com.tw/sys/api/OrgExts/Export?ServiceItems=" +
+          `${process.env.VUE_APP_BASE_API}OrgExts/Export?ServiceItems=` +
           data.ServiceItems +
           "&County=" +
           data.County +

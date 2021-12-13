@@ -904,7 +904,7 @@ export default {
         const data = this.tempExport;
 
         const url =
-          "http://sme.yummydesign.com.tw/sys/api/Users/ExportUserByAdmin?Type=" +
+          `${process.env.VUE_APP_BASE_API}Users/ExportUserByAdmin?Type=` +
           data.Type +
           "&roleId=" +
           data.roleId +
