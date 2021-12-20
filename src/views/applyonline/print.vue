@@ -318,7 +318,7 @@ export default {
     },
   },
   mounted() {
-    const getId = "";
+    let getId = "";
     if (this.$route.query.id) {
       getId = this.$route.query.id;
     } else {
