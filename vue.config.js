@@ -4,6 +4,7 @@ function resolve (dir) {
 }
 
 module.exports = {
+  publicPath: "/user/",
   lintOnSave: process.env.NODE_ENV !== 'production',
   devServer: {
     port: 1803,     // 端口
