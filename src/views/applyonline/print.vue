@@ -271,75 +271,71 @@ export default {
     };
   },
   methods: {
-    getProfile() {
-      company
-        .getUserExts({ id: this.$store.state.user.userInfo.id })
-        .then((res) => {
-          this.profileList = res.result;
-          this.profileList.businessStageItems =
-            this.profileList.businessStageItems?.join(",");
-          this.profileList.industryTypeItems =
-            this.profileList.industryTypeItems?.join(",");
-          this.profileList.interestItems =
-            this.profileList.interestItems?.join(",");
-        });
+    getProfile(id) {
+      company.getUserExts({ id }).then((res) => {
+        this.profileList = res.result;
+        this.profileList.businessStageItems =
+          this.profileList.businessStageItems?.join(",");
+        this.profileList.industryTypeItems =
+          this.profileList.industryTypeItems?.join(",");
+        this.profileList.interestItems =
+          this.profileList.interestItems?.join(",");
+      });
     },
-    getDeveloping() {
-      company
-        .getCompanys({ id: this.$store.state.user.userInfo.id })
-        .then((res) => {
-          this.developingList = res.result;
-          this.developingList.setUpDate = moment(
-            this.developingList.setUpDate
-          ).format("YYYY");
-        });
+    getDeveloping(id) {
+      company.getCompanys({ id }).then((res) => {
+        this.developingList = res.result;
+        this.developingList.setUpDate = moment(
+          this.developingList.setUpDate
+        ).format("YYYY");
+      });
     },
-    getOperations() {
-      company
-        .getCompanyOperations({ id: this.$store.state.user.userInfo.id })
-        .then((res) => {
-          this.operationList = res.result;
-          this.operationList.incomeModelITems =
-            this.operationList.incomeModelITems?.join(",");
-        });
+    getOperations(id) {
+      company.getCompanyOperations({ id }).then((res) => {
+        this.operationList = res.result;
+        this.operationList.incomeModelITems =
+          this.operationList.incomeModelITems?.join(",");
+      });
     },
-    getTeams() {
-      company
-        .getCompanyTeams({ id: this.$store.state.user.userInfo.id })
-        .then((res) => {
-          this.teamsList = res.result;
-        });
+    getTeams(id) {
+      company.getCompanyTeams({ id }).then((res) => {
+        this.teamsList = res.result;
+      });
     },
-    getShareHolders() {
+    getShareHolders(id) {
       company
         .getCompanyShareHolders({
-          CompanyId: this.$store.state.user.userInfo.id,
+          CompanyId: id,
         })
         .then((res) => {
           this.shareHolderList = res.data;
         });
     },
-    getOthers() {
-      company
-        .getCompanyOtherss({ id: this.$store.state.user.userInfo.id })
-        .then((res) => {
-          this.otherList = res.result;
-        });
+    getOthers(id) {
+      company.getCompanyOtherss({ id }).then((res) => {
+        this.otherList = res.result;
+      });
     },
   },
   mounted() {
+    const getId = "";
+    if (this.$route.query.id) {
+      getId = this.$route.query.id;
+    } else {
+      getId = this.$store.state.user.userInfo.id;
+    }
     // 基本資料
-    this.getProfile();
+    this.getProfile(getId);
     // 公司發展階段
-    this.getDeveloping();
+    this.getDeveloping(getId);
     // 營運狀況
-    this.getOperations();
+    this.getOperations(getId);
     // 經營團隊說明
-    this.getTeams();
+    this.getTeams(getId);
     // 股東結構說明
-    this.getShareHolders();
+    this.getShareHolders(getId);
     // 其他項目
-    this.getOthers();
+    this.getOthers(getId);
   },
 };
 </script>
