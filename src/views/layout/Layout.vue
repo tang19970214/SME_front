@@ -1,13 +1,13 @@
 <template>
   <div class="app-wrapper" :class="classObj">
     <el-container class="flex-column">
-      <el-header height="45px">
+      <el-header height="45px" v-if="$route.name !== 'print'">
         <navbar></navbar>
       </el-header>
       <el-container class="flex-row flex-item">
-        <sidebar class="sidebar-container"></sidebar>
+        <sidebar class="sidebar-container" v-if="$route.name !== 'print'"></sidebar>
         <div class="main-container flex-item">
-          <tags-view class="custom-tags-view"></tags-view>
+          <tags-view class="custom-tags-view" v-if="$route.name !== 'print'"></tags-view>
           <app-main></app-main>
         </div>
       </el-container>

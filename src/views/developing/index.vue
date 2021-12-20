@@ -10,7 +10,7 @@
         <el-input v-model="temp.einno"></el-input>
       </el-form-item>
       <el-form-item size="small" :label="'成立年度'">
-        <el-date-picker class="w-full" v-model="temp.setUpDate" type="date" value-format="yyyy-MM-dd" placeholder="請選擇日期">
+        <el-date-picker class="w-full" v-model="temp.setUpDate" type="year" value-format="yyyy-MM-dd" placeholder="請選擇年份">
         </el-date-picker>
       </el-form-item>
       <el-form-item size="small" :label="'資本額'">

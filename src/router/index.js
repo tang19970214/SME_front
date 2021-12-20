@@ -116,6 +116,16 @@ export const constantRouterMap = [{
         sortNo: 0
       },
       component: () => import('@/views/iframePage/index')
+    }, {
+      path: '/print',
+      name: 'print',
+      hidden: true,
+      meta: {
+        title: '',
+        icon: '',
+        sortNo: 0
+      },
+      component: () => import('@/views/applyonline/print')
     }]
   }
   // {
