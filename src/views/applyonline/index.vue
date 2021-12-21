@@ -75,7 +75,7 @@ export default {
         });
     },
     apply(PlanName) {
-      userExts.SendPlan({ PlanName }).then((res) => {
+      userExts.SendPlan({ PlanName: PlanName }).then((res) => {
         if (res.code === 200) {
           this.$message({
             title: "成功",
