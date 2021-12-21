@@ -65,12 +65,12 @@ export default {
     };
   },
   methods: {
-    checkUser() {
+    checkUser(projectName) {
       userExts
         .CheckAllColumns({ userId: this.$store.state.user.userInfo.id })
         .then((res) => {
           if (res.code === 200) {
-            this.apply();
+            this.apply(projectName);
           }
         });
     },
