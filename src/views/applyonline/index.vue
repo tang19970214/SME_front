@@ -85,7 +85,7 @@ export default {
             title: "成功",
             message: "申請成功，若有後續問題請聯繫02-2586-5000#214 林先生",
             type: "success",
-            duration: 1000,
+            duration: 2000,
           });
 
           setTimeout(() => {
@@ -95,7 +95,7 @@ export default {
               name: "print",
             });
             window.open(routeUrl.href, "_blank");
-          }, 1000);
+          }, 2000);
         }
       });
     },
