@@ -28,7 +28,7 @@
         </div>
 
         <div class="right">
-          <button @click="checkUser(item.projectName)">點我申請</button>
+          <button :class="{'right__disable': btnLoading}" :disabled="btnLoading" @click="checkUser(item.projectName)">點我申請</button>
         </div>
       </div>
     </div>
@@ -44,6 +44,7 @@ export default {
   components: { Title },
   data() {
     return {
+      btnLoading: false,
       applyList: [
         {
           id: 1,
@@ -66,11 +67,14 @@ export default {
   },
   methods: {
     checkUser(projectName) {
+      this.btnLoading = true;
       userExts
         .CheckAllColumns({ userId: this.$store.state.user.userInfo.id })
         .then((res) => {
           if (res.code === 200) {
             this.apply(projectName);
+          } else {
+            this.btnLoading = false;
           }
         });
     },
@@ -79,12 +83,14 @@ export default {
         if (res.code === 200) {
           this.$message({
             title: "成功",
-            message: "申請成功",
+            dangerouslyUseHTMLString: true,
+            message: "申請成功，若有後續問題請聯繫02-2586-5000#214 林先生",
             type: "success",
             duration: 1000,
           });
 
           setTimeout(() => {
+            this.btnLoading = false;
             // 開啟列印頁
             let routeUrl = this.$router.resolve({
               name: "print",
@@ -204,6 +210,11 @@ export default {
             width: auto;
             padding: 16px 20px;
             font-size: 36px;
+          }
+
+          &.right__disable {
+            opacity: 0.5;
+            cursor: not-allowed;
           }
         }
       }

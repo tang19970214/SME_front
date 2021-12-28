@@ -1,7 +1,10 @@
 <template>
-  <div class="printPage">
+  <div class="printPage" ref="print">
+    <div class="no-print printBtn">
+      <el-button type="primary" plain @click="goPrint()">列印</el-button>
+    </div>
     <!-- 基本資料 -->
-    <div class="printPage__block profileWidth">
+    <div class="page-break printPage__block profileWidth">
       <div class="printPage__block--title">
         <strong>基本資料</strong>
       </div>
@@ -43,7 +46,7 @@
       </div>
     </div>
     <!-- 公司發展階段 -->
-    <div class="printPage__block developingWidth">
+    <div class="page-break printPage__block developingWidth">
       <div class="printPage__block--title">
         <strong>公司發展階段</strong>
       </div>
@@ -148,7 +151,7 @@
       </div>
     </div>
     <!-- 經營團隊說明 -->
-    <div class="printPage__block teamsWidth">
+    <div class="page-break printPage__block teamsWidth">
       <div class="printPage__block--title">
         <strong>經營團隊說明</strong>
       </div>
@@ -193,20 +196,20 @@
       </div>
       <div class="printPage__block--content">
         <div class="label">團隊成員</div> -->
-      <div class="newBlock" v-for="(item, idx) in shareHolderList" :key="idx">
-        <div class="newBlock__content">
+      <div class="shareNewBlock" v-for="(item, idx) in shareHolderList" :key="idx">
+        <div class="shareNewBlock__content">
           <div class="newLabel">股東姓名：</div>
           <div class="value">{{item.name}}</div>
         </div>
-        <div class="newBlock__content">
+        <div class="shareNewBlock__content">
           <div class="newLabel">持股股數：</div>
           <div class="value">{{item.stockCount}}</div>
         </div>
-        <div class="newBlock__content">
+        <div class="shareNewBlock__content">
           <div class="newLabel">持股比例：</div>
           <div class="value">{{item.stockRate}}</div>
         </div>
-        <div class="newBlock__content">
+        <div class="shareNewBlock__content">
           <div class="newLabel">出資額度：</div>
           <div class="value">{{item.capital}}</div>
         </div>
@@ -316,6 +319,21 @@ export default {
         this.otherList = res.result;
       });
     },
+
+    goPrint() {
+      let bdhtml = this.$refs.print.innerHTML;
+      let sprint = "<!--startprint-->";
+      let eprint = "<!--endprint-->";
+      let printhtml = bdhtml.substring(bdhtml.indexOf(sprint) + 18);
+      let printhtmls = printhtml.substring(0, printhtml.indexOf(eprint));
+      window.document.body.innerHTML = printhtmls;
+      window.document.body.innerHTML = bdhtml;
+      window.print();
+
+      // 關閉後刷新
+      window.document.body.innerHTML = bdhtml;
+      window.location.reload();
+    },
   },
   mounted() {
     let getId = "";
@@ -342,7 +360,13 @@ export default {
 
 <style lang="scss" scoped>
 .printPage {
-  height: 100%;
+  min-height: 100%;
+
+  .printBtn {
+    width: 100%;
+    padding-top: 8px;
+    text-align: center;
+  }
 
   &__block {
     width: 100%;
@@ -409,7 +433,7 @@ export default {
     .label {
       min-width: 210px;
     }
-    .newBlock {
+    .shareNewBlock {
       &__content {
         padding: 16px 0 16px 50px;
         display: flex;
@@ -440,6 +464,44 @@ export default {
   .otherWidth {
     .label {
       min-width: 210px;
+    }
+  }
+}
+
+@page {
+  size: A4 portrait;
+  orphans: 4;
+  widows: 2;
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+
+  .page-break {
+    page-break-inside: avoid;
+    page-break-after: always;
+  }
+
+  .shareNewBlock {
+    &__content {
+      padding: 16px 0 16px 50px;
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .newLabel {
+        min-width: 100px;
+      }
+
+      .value {
+        font-weight: 700;
+      }
     }
   }
 }
