@@ -83,7 +83,6 @@ export default {
         if (res.code === 200) {
           this.$message({
             title: "成功",
-            dangerouslyUseHTMLString: true,
             message: "申請成功，若有後續問題請聯繫02-2586-5000#214 林先生",
             type: "success",
             duration: 1000,

@@ -47,6 +47,7 @@ service.interceptors.response.use(
         })
       } else {
         Message({
+          dangerouslyUseHTMLString: true,
           message: res.message || res.msg,
           type: 'error',
           duration: 5 * 1000
