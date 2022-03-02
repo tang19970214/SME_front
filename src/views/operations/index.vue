@@ -8,8 +8,7 @@
       </el-form-item>
       <el-form-item size="small" :label="'營收模式'">
         <el-select class="filter-item w-full" v-model="temp.incomeModelITems" placeholder="請選擇營收模式" multiple>
-          <el-option v-for="item in  incomeModelITemsList" :key="item.id" :label="item.name" :value="item.dtValue">
-          </el-option>
+          <el-option v-for="item in incomeModelITemsList" :key="item.id" :label="item.name" :value="item.dtValue"> </el-option>
         </el-select>
         <el-input v-model="temp.incomeModelOther" placeholder="請輸入其他營收模式" v-if="getOperationsOther()"></el-input>
       </el-form-item>
@@ -26,9 +25,7 @@
 
       <div class="flex-items-c-justify-c mt-16">
         <el-input v-model="operationsYear" placeholder="請輸入年份，例：101" size="small"></el-input>
-        <el-button type="success" size="small" @click="addTabOperations()" plain :disabled="!operationsYear">
-          新增
-        </el-button>
+        <el-button type="success" size="small" @click="addTabOperations()" plain :disabled="!operationsYear"> 新增 </el-button>
       </div>
       <el-tabs v-model="tabsOperationsValue" type="border-card" closable @tab-remove="removeTabOperations" v-if="tabsOperationsList.length > 0">
         <el-tab-pane v-for="(items, idx) in tabsOperationsList" :key="idx" :label="items.title + '年'" :name="items.name">
@@ -114,21 +111,18 @@ export default {
     },
 
     async getList() {
-      await company
-        .getCompanyOperations({ id: this.$store.state.user.userInfo.id })
-        .then((res) => {
-          res.result.companyStockItmes?.forEach((it, idx) => {
-            this.tabsOperationsList.push({
-              title: it.year,
-              name: String(idx + 1),
-              operationsYearList: it,
-            });
+      await company.getCompanyOperations({ id: this.$store.state.user.userInfo.id }).then((res) => {
+        res.result.companyStockItmes?.forEach((it, idx) => {
+          this.tabsOperationsList.push({
+            title: it.year,
+            name: String(idx + 1),
+            operationsYearList: it,
           });
-          this.defaultOperationsName =
-            res.result.companyStockItmes?.length + 1 || 1;
-          this.temp = Object.assign({}, res.result);
-          this.temp.id = this.$store.state.user.userInfo.id;
         });
+        this.defaultOperationsName = res.result.companyStockItmes?.length + 1 || 1;
+        this.temp = Object.assign({}, res.result);
+        this.temp.id = this.$store.state.user.userInfo.id;
+      });
     },
 
     addTabOperations(txt) {
@@ -150,25 +144,15 @@ export default {
       this.defaultOperationsName = this.defaultOperationsName + 1;
     },
     removeTabOperations(targetName) {
-      this.tabsOperationsList = this.tabsOperationsList.filter(
-        (res) => res.name !== String(targetName)
-      );
+      this.tabsOperationsList = this.tabsOperationsList.filter((res) => res.name !== String(targetName));
       this.tabsOperationsValue = this.tabsOperationsList[0].name;
     },
 
     async addOrUpdate() {
       this.btnLoading = true;
-      this.temp.companyStockItmes = this.tabsOperationsList.map(
-        (i) => i.operationsYearList
-      );
-      this.temp.businessStageItems =
-        this.temp.businessStageItems?.length == 0
-          ? null
-          : this.temp.businessStageItems;
-      this.temp.industryTypeItems =
-        this.temp.industryTypeItems?.length == 0
-          ? null
-          : this.temp.industryTypeItems;
+      this.temp.companyStockItmes = this.tabsOperationsList.map((i) => i.operationsYearList);
+      this.temp.businessStageItems = this.temp.businessStageItems?.length == 0 ? null : this.temp.businessStageItems;
+      this.temp.industryTypeItems = this.temp.industryTypeItems?.length == 0 ? null : this.temp.industryTypeItems;
       await company.addOrUpdateCompanyOperations(this.temp).then((res) => {
         if (res.code == 200) {
           this.$notify({
@@ -196,7 +180,7 @@ export default {
     this.getIncomeModelItemsList();
     await this.getList();
     if (this.tabsOperationsList.length === 0) {
-      this.addTabOperations("範例");
+      this.addTabOperations("110");
     }
   },
 };
@@ -219,13 +203,7 @@ export default {
   }
 }
 
-::v-deep
-  .el-tabs--border-card
-  > .el-tabs__header
-  > .el-tabs__nav-wrap
-  > .el-tabs__nav-scroll
-  > .el-tabs__nav
-  > .el-tabs__item {
+::v-deep .el-tabs--border-card > .el-tabs__header > .el-tabs__nav-wrap > .el-tabs__nav-scroll > .el-tabs__nav > .el-tabs__item {
   color: gray !important;
 
   &.is-active {
