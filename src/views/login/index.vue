@@ -1,10 +1,10 @@
 <template>
   <div class="loginPage">
     <div class="loginPage__block">
-      <div class="loginPage__block--logo">
-        <img src="@/assets/logo.png?imageView2/1/w/80/h/80" alt="LOGO">
+      <a class="loginPage__block--logo" href="http://sme.yummydesign.com.tw/" target="_blank">
+        <img src="@/assets/logo.png?imageView2/1/w/80/h/80" alt="LOGO" />
         <strong>資金通</strong>
-      </div>
+      </a>
 
       <div class="loginPage__block--introduce">
         <p>您可以使用google帳號登入或註冊</p>
@@ -13,7 +13,7 @@
       <div class="loginPage__block--googleLogin">
         <g-signin-button :params="googleSignInParams" @success="onSignInSuccess">
           <!-- <button> -->
-          <img src="@/assets/login/google-plus.svg" alt="" width="30px">
+          <img src="@/assets/login/google-plus.svg" alt="" width="30px" />
           Sign in with Google
           <!-- </button> -->
         </g-signin-button>
@@ -66,7 +66,7 @@
                   <i class="el-icon-arrow-right"></i>
                   <strong>電子郵件</strong>
                 </template>
-                <el-button :style="{'color': timer !==null ? 'gray' : 'black'}" slot="append" @click="sendCode(registerInfo.email)" :disabled="timer !== null">{{reciprocalTime == 30 ? "" : `${reciprocalTime} `}}傳送驗證碼</el-button>
+                <el-button :style="{ color: timer !== null ? 'gray' : 'black' }" slot="append" @click="sendCode(registerInfo.email)" :disabled="timer !== null">{{ reciprocalTime == 30 ? "" : `${reciprocalTime} ` }}傳送驗證碼</el-button>
               </el-input>
             </el-form-item>
 
@@ -94,7 +94,7 @@
           </div>
 
           <div class="loginCard__btn loginCard__newMember--btn">
-            <button :class="{'disBtn': !agreeTerms}" @click="register()" :disabled="!agreeTerms">建立帳號</button>
+            <button :class="{ disBtn: !agreeTerms }" @click="register()" :disabled="!agreeTerms">建立帳號</button>
           </div>
         </div>
       </div>
@@ -148,15 +148,11 @@ export default {
         // let reg1 = new RegExp(
         //   /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*?-_])[0-9A-Za-z!@#$%^&*?-_]{12,}$/
         // );
-        let reg1 = new RegExp(
-          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&-_])[A-Za-z\d$@$!%*#?&-_]{12,}$/
-        );
+        let reg1 = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&-_])[A-Za-z\d$@$!%*#?&-_]{12,}$/);
         if (value.search(reg1) !== -1) {
           return callback();
         } else {
-          return callback(
-            new Error("密碼格式錯誤，至少12碼、英文大小寫、數字、特殊符號混合")
-          );
+          return callback(new Error("密碼格式錯誤，至少12碼、英文大小寫、數字、特殊符號混合"));
         }
       } else {
         return callback(new Error("必填欄位"));
@@ -182,8 +178,7 @@ export default {
       agreeTerms: false,
 
       googleSignInParams: {
-        client_id:
-          "752935186531-t976aejd5qtanbo6dk17e1g3nna7igv3.apps.googleusercontent.com",
+        client_id: "752935186531-t976aejd5qtanbo6dk17e1g3nna7igv3.apps.googleusercontent.com",
       },
 
       timer: null,
@@ -206,10 +201,7 @@ export default {
           });
           this.rememberMe = false;
         } else {
-          window.localStorage.setItem(
-            "userInfo",
-            JSON.stringify(this.loginInfo)
-          );
+          window.localStorage.setItem("userInfo", JSON.stringify(this.loginInfo));
         }
       } else {
         window.localStorage.removeItem("userInfo");
@@ -519,8 +511,7 @@ $supColor: #efdbc1;
           padding: 4px 0;
           border-radius: 4px;
           border: 1px solid white;
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-            0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
           text-align: center;
           font-size: 14px;
           font-weight: bold;

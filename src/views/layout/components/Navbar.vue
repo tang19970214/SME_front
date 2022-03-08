@@ -2,7 +2,7 @@
   <el-menu class="navbar" mode="horizontal">
     <div class="logo">
       <span class="logo__bg">
-        <img class="user-avatar" :src="logo">資金通
+        <a href="http://sme.yummydesign.com.tw/" target="_blank"><img class="user-avatar" :src="logo" />資金通</a>
       </span>
     </div>
 
@@ -10,7 +10,7 @@
 
     <div class="avatar-container">
       <div class="avatar-wrapper flex-items-c-justify-c">
-        歡迎您，{{name}}
+        歡迎您，{{ name }}
         <g-signin-button class="googleBtn mx-8" :params="googleSignInParams" @success="handleGoogleBind">
           <span>綁定Google</span>
         </g-signin-button>
@@ -33,8 +33,7 @@ export default {
       logo: logo,
       // theme: 1,
       googleSignInParams: {
-        client_id:
-          "752935186531-t976aejd5qtanbo6dk17e1g3nna7igv3.apps.googleusercontent.com",
+        client_id: "752935186531-t976aejd5qtanbo6dk17e1g3nna7igv3.apps.googleusercontent.com",
       },
     };
   },
