@@ -2,7 +2,7 @@
   <el-menu class="navbar" mode="horizontal">
     <div class="logo">
       <span class="logo__bg">
-        <a href="http://sme.yummydesign.com.tw/" target="_blank"><img class="user-avatar" :src="logo" />資金通</a>
+        <a href="https://www.smefund.com.tw/" target="_blank"><img class="user-avatar" :src="logo" />資金通</a>
       </span>
     </div>
 

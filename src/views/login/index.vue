@@ -1,7 +1,7 @@
 <template>
   <div class="loginPage">
     <div class="loginPage__block">
-      <a class="loginPage__block--logo" href="http://sme.yummydesign.com.tw/" target="_blank">
+      <a class="loginPage__block--logo" href="https://www.smefund.com.tw/" target="_blank">
         <img src="@/assets/logo.png?imageView2/1/w/80/h/80" alt="LOGO" />
         <strong>資金通</strong>
       </a>
